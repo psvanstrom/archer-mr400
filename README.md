@@ -35,6 +35,7 @@ The following endpoints are implemented in the library:
 | `get_wan_ip_connection()` | Fetch WAN IP connection status | `/cgi?1` | `[WAN_IP_CONN#2,1,1,0,0,0#0,0,0,0,0,0]0,0` |
 | `log()` | Fetch the router log | `/log` | `N/A` |
 | `reboot()` | Reboot the router | `/cgi?7` | `[ACT_REBOOT#0,0,0,0,0,0#0,0,0,0,0,0]0,0` |
+| `logout()` | Logout from the router | `cgi?8` | `[/cgi/logout#0,0,0,0,0,0#0,0,0,0,0,0]0,0` |
 
 The functions that fetches information will return the info in a dictionary, with the same format as the router returns the information, you will have to figure out what the different key/values stand for yourself:
 ```python
@@ -77,6 +78,7 @@ client.login("admin", "myrouterpass")
 client.get_wan_lte_config()
 client.reboot()
 ```
+5. When you are finished, make sure to call the `logout()` function to logout, otherwise the web interface will complain about an already logged in session if you try to log in manually.
 
 The `login()` method will raise a `ConnectionFailedException` if the connection timed out (wrong router IP?) or a `LoginFailedException` if the login was unsuccessful (wrong username or password?). Any call to the endpoint methods will raise a `NotLoggedInException` if there's no active logged in session.
 

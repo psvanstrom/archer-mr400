@@ -30,7 +30,7 @@ The following endpoints are implemented in the library:
 | `reboot()` | Reboot the router | `/cgi?7` | `[ACT_REBOOT#0,0,0,0,0,0#0,0,0,0,0,0]0,0` |
 
 The functions that fetches information will return the info in a dictionary, with the same format as the router returns the information, you will have to figure out what the different key/values stand for yourself:
-```
+```python
 {
   'ussdSessionStatus': '0',
   'ussdStatus': '0',
@@ -40,16 +40,16 @@ The functions that fetches information will return the info in a dictionary, wit
 ```
 
 The `get_clients()` function will return a list of dictionaries, each representing one connected client:
-```
+```python
   {
-    "IPAddress": "192.168.1.101",
-    "addressSource": "DHCP",
-    "leaseTimeRemaining": "81922",
-    "MACAddress": "AA:BB:CC:DD:EE:FF",
-    "hostName": "MacBook-Pro-M1",
-    "X_TP_ConnType": "3",
-    "active": "1"
-  }
+    'IPAddress': '192.168.1.101',
+    'addressSource': 'DHCP',
+    'leaseTimeRemaining': '81922',
+    'MACAddress': 'AA:BB:CC:DD:EE:FF',
+    'hostName': 'MacBook-Pro-M1',
+    'X_TP_ConnType': '3',
+    'active': '1'
+  },
 ```
 
 ## Usage

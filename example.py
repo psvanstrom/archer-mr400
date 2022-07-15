@@ -3,7 +3,7 @@ from archer.mr400 import MR400Client, ConnectionFailedException, LoginFailedExce
 if __name__ == "__main__":
 	client = MR400Client("192.168.1.1")
 	try:
-		client.login("admin", "YzJpDcMKQGRHiq437")
+		client.login("admin", "myrouterpass")
 	except ConnectionFailedException:
 		print("Cannot connect to router")
 		exit()

@@ -10,8 +10,6 @@ if __name__ == "__main__":
 	except LoginFailedException:
 		print("Bad login")
 		exit()
-
-
 	try:
 		print(client.get_lte_info())
 		print(client.get_device_info())

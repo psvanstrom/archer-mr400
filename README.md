@@ -1,6 +1,13 @@
 # archer-mr400
 Small Python lib for communicating with the TP-Link Archer MR400 LTE V2 router. It might work with other Archer routers as well, but the MR400 v2 is the only router I've tested it on.
 
+## Dependencies
+The library uses the [Pure Python RSA implementation](https://pypi.org/project/rsa/) library and the [Requests](https://pypi.org/project/requests/) library. Install them using pip:
+```
+pip install rsa
+pip install requests
+```
+
 ## How it works
 The client mimics the way that the router admin web page logs in to the router and send commands. 
 

@@ -16,6 +16,9 @@ if __name__ == "__main__":
 		print(client.get_device_info())
 		print(client.get_wan_lte_config())
 		print(client.get_wan_ip_connection())
+		print(client.get_sms())
+		#client.delete_sms(2)
+		client.send_sms("0700000000", "Test SMS from Archer MR400Client".)
 		#client.reboot()
 		client.logout()
 	except NotLoggedInException:

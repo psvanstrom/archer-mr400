@@ -60,23 +60,29 @@ class MR400Client:
 				result[split_str[0]] = split_str[1]
 		return result
 
-	def get_clients(self):
-		self.__check_login_status()
-		r = self.session.post(f'{self.cgi_url}?5', data="[LAN_HOST_ENTRY#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+	def __make_list_dict(self, response_text):
 		l = []
 		d = {}
 		i = 1
-		for line in r.text.splitlines():
+		for line in response_text.splitlines():
 			if line == f"[{i},0,0,0,0,0]0":
 				i = i + 1
 				if d:
+					d["idx"] = i - 2
 					l.append(d)
 					d = {}
 			elif "=" in line:
 				split_str = line.split("=")
 				d[split_str[0]] = split_str[1]
-		l.append(d)
+		if d:
+			d["idx"] = i - 1
+			l.append(d)
 		return l
+
+	def get_clients(self):
+		self.__check_login_status()
+		r = self.session.post(f'{self.cgi_url}?5', data="[LAN_HOST_ENTRY#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+		return self.__make_list_dict(r.text)
 
 	def get_lte_info(self):
 		self.__check_login_status()
@@ -102,6 +108,19 @@ class MR400Client:
 		self.__check_login_status()
 		r = self.session.get(f'{self.cgi_url}/log')
 		return r.text.splitlines()
+
+	def get_sms(self):
+		self.__check_login_status()
+		r = self.session.post(f'{self.cgi_url}?5', data="[LTE_SMS_RECVMSGENTRY#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+		return self.__make_list_dict(r.text)
+
+	def delete_sms(self, idx):
+		self.__check_login_status()
+		r = self.session.post(f'{self.cgi_url}?4', data=f"[LTE_SMS_RECVMSGENTRY#{idx},0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+
+	def send_sms(self, to, message):
+		self.__check_login_status()
+		self.session.post(f'{self.cgi_url}?2', data=f"[LTE_SMS_SENDNEWMSG#0,0,0,0,0,0#0,0,0,0,0,0]0,3\r\nindex=1\r\nto={to}\r\ntextContent={message}\r\n")
 
 	def reboot(self):
 		self.__check_login_status()

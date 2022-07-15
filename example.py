@@ -1,10 +1,22 @@
-from archer import mr400
+from archer.mr400 import MR400Client, ConnectionFailedException, LoginFailedException 
 
 if __name__ == "__main__":
-	mr400 = mr400.MR400Client("192.168.1.1")
-	mr400.login("admin", "myrouterpass")
-	print(mr400.get_lte_info())
-	print(mr400.get_device_info())
-	print(mr400.get_wan_lte_config())
-	print(mr400.get_wan_ip_connection())
-	#archer.reboot()
+	client = MR400Client("192.168.1.1")
+	try:
+		client.login("admin", "YzJpDcMKQGRHiq437")
+	except ConnectionFailedException:
+		print("Cannot connect to router")
+		exit()
+	except LoginFailedException:
+		print("Bad login")
+		exit()
+
+
+	try:
+		print(client.get_lte_info())
+		print(client.get_device_info())
+		print(client.get_wan_lte_config())
+		print(client.get_wan_ip_connection())
+		#client.reboot()
+	except NotLoggedInException:
+		print("Not logged in")

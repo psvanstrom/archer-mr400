@@ -79,6 +79,9 @@ client.get_wan_lte_config()
 client.reboot()
 ```
 5. When you are finished, make sure to call the `logout()` function to logout, otherwise the web interface will complain about an already logged in session if you try to log in manually.
+```python
+client.logout()
+```
 
 The `login()` method will raise a `ConnectionFailedException` if the connection timed out (wrong router IP?) or a `LoginFailedException` if the login was unsuccessful (wrong username or password?). Any call to the endpoint methods will raise a `NotLoggedInException` if there's no active logged in session.
 

@@ -1,4 +1,4 @@
-from archer.mr400 import MR400Client, ConnectionFailedException, LoginFailedException 
+from archer.mr400 import MR400Client, ConnectionFailedException, LoginFailedException, NotLoggedInException
 
 if __name__ == "__main__":
 	client = MR400Client("192.168.1.1")
@@ -17,5 +17,6 @@ if __name__ == "__main__":
 		print(client.get_wan_lte_config())
 		print(client.get_wan_ip_connection())
 		#client.reboot()
+		client.logout()
 	except NotLoggedInException:
 		print("Not logged in")

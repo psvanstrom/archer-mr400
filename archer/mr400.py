@@ -106,3 +106,9 @@ class MR400Client:
 	def reboot(self):
 		self.__check_login_status()
 		self.session.post(f'{self.cgi_url}?7', data="[ACT_REBOOT#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+
+	def logout(self):
+		self.__check_login_status()
+		self.session.post(f'{self.cgi_url}?8', data="[/cgi/clearBusy#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+		self.session.post(f'{self.cgi_url}?8', data="[/cgi/logout#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+		del self.session.headers["TokenID"]

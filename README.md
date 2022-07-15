@@ -13,7 +13,7 @@ The login flow looks as follows:
 5. The token value is retrieved from the returned HTML by extracting it from the following text found in the HTML response: `var token="<token>";` and is added as a header on the current session with the header name `TokenID`.
 6. With the `JSESSIONID` cookie and the `TokenID` header set on the current session, the library can now call various endpoints on the router to fetch information and call actions.
 
-## Router endpoints
+## Router endpoint functions
 The various endpoints are called by POSTing to `http://<router_ip>/cgi?<n>` with a command payload. I have only added support for some of the endpoints, but it is easy to extend this by checking the admin web page using the developer console of the web browser and mimic the commands being sent.
 
 The log endpoint differs in that it is called using GET and doesn't require a payload. It will dump the entire router log available.
@@ -21,6 +21,7 @@ The log endpoint differs in that it is called using GET and doesn't require a pa
 The following endpoints are implemented in the library:
 | Function  | Description | URL | Payload |
 | --------- | ----------- | --- | ------- |
+| `get_clients()` | Get all connected clients | `/cgi?5` | `[LAN_HOST_ENTRY#0,0,0,0,0,0#0,0,0,0,0,0]0,0` |
 | `get_lte_info()` | Fetch LTE network status | `/cgi?1` | `[LTE_NET_STATUS#2,1,0,0,0,0#0,0,0,0,0,0]0,0` |
 | `get_device_info()` | Fetch device information | `/cgi?1` | `[IGD_DEV_INFO#0,0,0,0,0,0#0,0,0,0,0,0]0,0` |
 | `get_wan_lte_config()` | Fetch WAN LTE config | `/cgi?1` | `[WAN_LTE_INTF_CFG#2,0,0,0,0,0#0,0,0,0,0,0]0,0` |
@@ -28,23 +29,46 @@ The following endpoints are implemented in the library:
 | `log()` | Fetch the router log | `/log` | `N/A` |
 | `reboot()` | Reboot the router | `/cgi?7` | `[ACT_REBOOT#0,0,0,0,0,0#0,0,0,0,0,0]0,0` |
 
+The functions that fetches information will return the info in a dictionary, with the same format as the router returns the information, you will have to figure out what the different key/values stand for yourself:
+```
+{
+  'ussdSessionStatus': '0',
+  'ussdStatus': '0',
+  'smsUnreadCount': '0',
+  ...
+}
+```
+
+The `get_clients()` function will return a list of dictionaries, each representing one connected client:
+```
+  {
+    "IPAddress": "192.168.1.101",
+    "addressSource": "DHCP",
+    "leaseTimeRemaining": "81922",
+    "MACAddress": "AA:BB:CC:DD:EE:FF",
+    "hostName": "MacBook-Pro-M1",
+    "X_TP_ConnType": "3",
+    "active": "1"
+  }
+```
+
 ## Usage
 1. Import the library:
 ```python
-from archer import mr400
+from archer.mr400 import MR400Client
 ```
 2. Create the client by providing the router IP:
 ```python
-mr400 = mr400.MR400Client("192.168.1.1")
+client = MR400Client("192.168.1.1")
 ```
 3. Start by logging in:
 ```python
-mr400.login("admin", "myrouterpass")
+client.login("admin", "myrouterpass")
 ```
 4. We now have a working connection to the router and can fetch info and issue commands:
 ```python
-mr400.get_wan_lte_config()
-mr400.reboot()
+client.get_wan_lte_config()
+client.reboot()
 ```
 
 The `login()` method will raise a `ConnectionFailedException` if the connection timed out (wrong router IP?) or a `LoginFailedException` if the login was unsuccessful (wrong username or password?). Any call to the endpoint methods will raise a `NotLoggedInException` if there's no active logged in session.

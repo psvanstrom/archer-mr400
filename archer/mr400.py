@@ -63,19 +63,19 @@ class MR400Client:
 	def __make_list_dict(self, response_text):
 		l = []
 		d = {}
-		i = 1
 		for line in response_text.splitlines():
-			if line == f"[{i},0,0,0,0,0]0":
-				i = i + 1
+			match = re.search("\\[([0-9]*),.*", line)
+			if match != None:
 				if d:
-					d["idx"] = i - 2
+					d["idx"] = i
 					l.append(d)
 					d = {}
+				i = int(match.group(1))
 			elif "=" in line:
 				split_str = line.split("=")
 				d[split_str[0]] = split_str[1]
 		if d:
-			d["idx"] = i - 1
+			d["idx"] = i
 			l.append(d)
 		return l
 
@@ -111,7 +111,7 @@ class MR400Client:
 
 	def get_sms(self):
 		self.__check_login_status()
-		r = self.session.post(f'{self.cgi_url}?5', data="[LTE_SMS_RECVMSGENTRY#0,0,0,0,0,0#0,0,0,0,0,0]0,0\r\n")
+		r = self.session.post(f'{self.cgi_url}?2&5', data="[LTE_SMS_RECVMSGBOX#0,0,0,0,0,0#0,0,0,0,0,0]0,1\r\nPageNumber=1\r\n[LTE_SMS_RECVMSGENTRY#0,0,0,0,0,0#0,0,0,0,0,0]1,5\r\nindex\r\nfrom\r\ncontent\r\nreceivedTime\r\nunread\r\n")
 		return self.__make_list_dict(r.text)
 
 	def delete_sms(self, idx):

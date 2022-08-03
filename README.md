@@ -47,16 +47,19 @@ The functions that fetches information will return the info in a dictionary, wit
 
 The `get_clients()` and `get_sms()` functions will return a list of dictionaries, each representing one connected client or SMS, respectively:
 ```python
-  {
-    'IPAddress': '192.168.1.101',
-    'addressSource': 'DHCP',
-    'leaseTimeRemaining': '81922',
-    'MACAddress': 'AA:BB:CC:DD:EE:FF',
-    'hostName': 'MacBook-Pro-M1',
-    'X_TP_ConnType': '3',
-    'active': '1',
-    'idx': '1'
-  }
+  [
+    {
+      'IPAddress': '192.168.1.101',
+      'addressSource': 'DHCP',
+      'leaseTimeRemaining': '81922',
+      'MACAddress': 'AA:BB:CC:DD:EE:FF',
+      'hostName': 'MacBook-Pro-M1',
+      'X_TP_ConnType': '3',
+      'active': '1',
+      'idx': '1'
+    },
+    ...
+  ]
 ```
 
 Check the [example.py](example.py) script for a demo on how to use the library.
